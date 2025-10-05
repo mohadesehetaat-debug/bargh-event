@@ -61,7 +61,7 @@
 <body>
   <div class="container">
     <!-- تصویر -->
-    <img src="WhatsApp Image 2025-10-04 at 14.49.35 (1).jpeg" alt="تصویر جرقه الکتریکی">
+    <img src="WhatsApp Image 2025-10-04 at 14.49.35 (1).jpeg" alt="تصویر رویداد برق">
 
     <!-- خوش‌آمدگویی -->
     <div class="welcome">
@@ -70,17 +70,17 @@
       این رویداد رایگان با هدف معرفی مسیرهای واقعی ورود به بازار کار، آموزش تخصصی و فرصت‌های استخدامی برگزار می‌شود.<br><br>
       در این جلسه حضوری با حوزه‌های زیر آشنا می‌شوید:<br>
       - برق ساختمان، دوربین مداربسته، آیفون تصویری<br>
-      - اتوماسیون صنعتی، برنامه‌نویسی PLC، سیستم‌های زیمنس<br>
+      - برق صنعتی، PLC<br>
       - مسیر یادگیری تا درآمد و همکاری با مجموعه فنی ما<br><br>
       لطفاً فرم زیر را با دقت تکمیل کنید تا اطلاعات لازم برای ثبت‌نام شما ثبت شود.  
       ظرفیت محدود است و اولویت با ثبت‌نام‌کنندگان زودتر خواهد بود.
     </div>
 
     <!-- فرم -->
-    <form action="https://formsubmit.co/mohadesehetaat@gmail.com" method="POST">
-      <input type="text" name="نام" placeholder="نام و نام خانوادگی" required>
-      <input type="tel" name="شماره تماس" placeholder="شماره تماس (واتساپ)" required>
-      <input type="email" name="ایمیل" placeholder="ایمیل (اختیاری)">
+    <form action="https://formsubmit.co/mohadesehetaat@gmail.com" method="POST" onsubmit="return validateForm()">
+      <input type="text" name="نام" id="name" placeholder="نام و نام خانوادگی" required>
+      <input type="tel" name="شماره تماس" id="phone" placeholder="شماره تماس (واتساپ)" pattern="09[0-9]{9}" required>
+      <input type="email" name="ایمیل" id="email" placeholder="ایمیل (اختیاری)">
       <input type="text" name="شهر" placeholder="شهر محل سکونت">
       <input type="text" name="رشته تحصیلی" placeholder="رشته تحصیلی">
       <select name="مدرک تحصیلی">
@@ -91,7 +91,7 @@
         <option>کارشناسی ارشد</option>
         <option>دکتری</option>
       </select>
-      <input type="text" name="سال فارغ‌التحصیلی" placeholder="سال فارغ‌التحصیلی">
+      <input type="number" name="سال فارغ‌التحصیلی" id="year" placeholder="سال فارغ‌التحصیلی" min="1350" max="1405">
       <textarea name="زمینه‌های مورد علاقه" placeholder="زمینه‌های مورد علاقه: برق ساختمان، دوربین، PLC، زیمنس..."></textarea>
       <textarea name="تجربه کاری" placeholder="تجربه کاری یا پروژه (اختیاری)"></textarea>
       <textarea name="هدف از شرکت" placeholder="هدف شما از شرکت در رویداد"></textarea>
@@ -107,5 +107,43 @@
       <button type="submit">ثبت‌نام</button>
     </form>
   </div>
+
+  <script>
+    function validateForm() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const year = document.getElementById("year").value.trim();
+
+      // اعتبارسنجی شماره موبایل
+      if (!/^09\d{9}$/.test(phone)) {
+        alert("شماره موبایل باید با 09 شروع شود و 11 رقم باشد");
+        return false;
+      }
+
+      // اعتبارسنجی ایمیل
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("ایمیل وارد شده معتبر نیست");
+        return false;
+      }
+
+      // اعتبارسنجی سال فارغ‌التحصیلی
+      if (year && (year < 1350 || year > 1405)) {
+        alert("سال فارغ‌التحصیلی باید بین ۱۳۵۰ تا ۱۴۰۵ باشد");
+        return false;
+      }
+
+      // جلوگیری از ثبت‌نام تکراری روی همان دستگاه
+      const key = name + "_" + phone;
+      if (localStorage.getItem(key)) {
+        alert("شما قبلاً با این نام و شماره ثبت‌نام کرده‌اید.");
+        return false;
+      }
+
+      // ذخیره در مرورگر
+      localStorage.setItem(key, "registered");
+      return true;
+    }
+  </script>
 </body>
 </html>
